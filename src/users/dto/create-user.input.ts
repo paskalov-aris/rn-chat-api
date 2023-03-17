@@ -16,4 +16,8 @@ export class CreateUserInput {
   @MaxLength(70)
   @Field({ nullable: true })
   biography?: string;
+
+  @Length(6, 32)
+  @Field()
+  password: string;
 }

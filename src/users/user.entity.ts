@@ -23,4 +23,8 @@ export class User {
   @Column({ nullable: true })
   @Field({ nullable: true })
   biography?: string;
+
+  @Column()
+  @Field()
+  password: string;
 }

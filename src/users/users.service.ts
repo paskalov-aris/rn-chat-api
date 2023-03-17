@@ -19,10 +19,10 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  getUserById(id: number) {
+  getUserByName(username: string) {
     return this.usersRepository.findOneOrFail({
       where: {
-        id,
+        username,
       },
     });
   }

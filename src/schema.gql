@@ -8,15 +8,23 @@ type User {
   firstName: String!
   lastName: String
   biography: String
+  password: String!
+}
+
+type LoginResponse {
+  access_token: String!
+  user: User!
 }
 
 type Query {
   getAllUsers: [User!]!
-  getUserById(id: Int!): User!
+  getUserByName(username: String!): User!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
+  login(loginUserInput: LoginUserInput!): LoginResponse!
+  signUp(signUpUserInput: SignUpUserInput!): User!
 }
 
 input CreateUserInput {
@@ -24,4 +32,18 @@ input CreateUserInput {
   firstName: String!
   lastName: String
   biography: String
+  password: String!
+}
+
+input LoginUserInput {
+  username: String!
+  password: String!
+}
+
+input SignUpUserInput {
+  username: String!
+  firstName: String!
+  lastName: String
+  biography: String
+  password: String!
 }
