@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { User } from 'src/users/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { SignUpUserInput } from './dto/signup-user.input';
+import { RefreshAccessTokenInput } from './dto/refresh-access-token-input';
 
 // NOTE: find a way to import this without using require
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -30,11 +31,12 @@ export class AuthService {
   }
 
   async login(user: User) {
+    const accessToken = this.generateAccessToken(user.id);
+    const refreshToken = this.generateRefreshToken(user.id);
+
     return {
-      access_token: this.jwtService.sign({
-        username: user.username,
-        sub: user.id,
-      }),
+      accessToken: accessToken,
+      refreshToken: refreshToken,
       user,
     };
   }
@@ -55,5 +57,57 @@ export class AuthService {
       ...signUpUserInput,
       password: hashedPassword,
     });
+  }
+
+  async refreshAccessToken({ refreshToken, userId }: RefreshAccessTokenInput) {
+    if (!refreshToken) {
+      throw new UnauthorizedException('Refresh token is missing!');
+    }
+
+    this.jwtService.verify(refreshToken, {
+      secret: process.env.JWT_SECRET_KEY,
+    });
+
+    const newAccessToken = this.generateAccessToken(userId);
+    const newRefreshToken = this.generateRefreshToken(userId);
+
+    return {
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken,
+    };
+  }
+
+  generateAccessToken(userId: number) {
+    const accessTokenPayload = {
+      sub: userId,
+    };
+
+    const accessTokenOptions: JwtSignOptions = {
+      expiresIn: '20m',
+    };
+
+    const accessToken = this.jwtService.sign(
+      accessTokenPayload,
+      accessTokenOptions,
+    );
+
+    return accessToken;
+  }
+
+  generateRefreshToken(userId: number) {
+    const refreshTokenPayload = {
+      sub: userId,
+    };
+
+    const refreshTokenOptions: JwtSignOptions = {
+      expiresIn: '7d',
+    };
+
+    const refreshToken = this.jwtService.sign(
+      refreshTokenPayload,
+      refreshTokenOptions,
+    );
+
+    return refreshToken;
   }
 }
