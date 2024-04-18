@@ -20,7 +20,7 @@ export class UsersService {
   }
 
   getUserByName(username: string) {
-    return this.usersRepository.findOneOrFail({
+    return this.usersRepository.findOne({
       where: {
         username,
       },

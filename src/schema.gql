@@ -12,8 +12,14 @@ type User {
 }
 
 type LoginResponse {
-  access_token: String!
+  accessToken: String!
+  refreshToken: String!
   user: User!
+}
+
+type RefreshAccessTokenResponse {
+  accessToken: String!
+  refreshToken: String!
 }
 
 type Query {
@@ -25,6 +31,7 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   login(loginUserInput: LoginUserInput!): LoginResponse!
   signUp(signUpUserInput: SignUpUserInput!): User!
+  refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): RefreshAccessTokenResponse!
 }
 
 input CreateUserInput {
@@ -46,4 +53,9 @@ input SignUpUserInput {
   lastName: String
   biography: String
   password: String!
+}
+
+input RefreshAccessTokenInput {
+  userId: Float!
+  refreshToken: String!
 }
