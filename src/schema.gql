@@ -1,0 +1,61 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: Int!
+  username: String!
+  firstName: String!
+  lastName: String
+  biography: String
+  password: String!
+}
+
+type LoginResponse {
+  accessToken: String!
+  refreshToken: String!
+  user: User!
+}
+
+type RefreshAccessTokenResponse {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type Query {
+  getAllUsers: [User!]!
+  getUserByName(username: String!): User!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  login(loginUserInput: LoginUserInput!): LoginResponse!
+  signUp(signUpUserInput: SignUpUserInput!): User!
+  refreshAccessToken(refreshAccessTokenInput: RefreshAccessTokenInput!): RefreshAccessTokenResponse!
+}
+
+input CreateUserInput {
+  username: String!
+  firstName: String!
+  lastName: String
+  biography: String
+  password: String!
+}
+
+input LoginUserInput {
+  username: String!
+  password: String!
+}
+
+input SignUpUserInput {
+  username: String!
+  firstName: String!
+  lastName: String
+  biography: String
+  password: String!
+}
+
+input RefreshAccessTokenInput {
+  userId: Float!
+  refreshToken: String!
+}

@@ -34,3 +34,9 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 node_modules
+
+# PostgreSQL data
+pgdata
+
+# env
+.env
